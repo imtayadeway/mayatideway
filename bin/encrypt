@@ -5,84 +5,60 @@ require "base64"
 require "kramdown"
 require "openssl"
 
-Dir.glob("_protected/*") do |fn|
+def main
+  protected_files.each do |fn|
+    encrypt_file(fn)
+  end
+end
+
+def protected_files
+  Dir.glob("_protected/*")
+end
+
+def encrypt_file(fn)
   File.open(fn) do |file|
-    _, front_matter, body = file.read.split("---", 3).map(&:strip)
-    html = Kramdown::Document.new(body.strip, input: "markdown").to_html
+    front_matter, html = parse_file(file)
+    encrypted = encrypt_body(html)
 
-    # hash = OpenSSL::Digest.new('SHA256')
-    # key = OpenSSL::KDF.pbkdf2_hmac(
-    #   "password",
-    #   salt: OpenSSL::Random.random_bytes(16),
-    #   iterations: 20_000,
-    #   length: hash.digest_length,
-    #   hash: hash
-    # )
-
-
-    aes = OpenSSL::Cipher.new("AES-256-CBC")
-    aes.encrypt
-    aes.pkcs5_keyivgen("password", "a22b7f0d", 1, "MD5")
-
-    # key = OpenSSL::PKCS5.pbkdf2_hmac(
-    #   "password",
-    #   OpenSSL::Random.random_bytes(16),
-    #   20_000,
-    #   aes.key_len,
-    #   OpenSSL::Digest.new("SHA256")
-    # )
-
-    # aes.key = key
-    # aes.iv = aes.random_iv
-    thing = aes.update(html) + aes.final
-
-    encrypted_body = Base64.strict_encode64(thing)
-
-    # aes = OpenSSL::Cipher.new("AES-256-CBC")
-    # aes.decrypt
-    # aes.key = key
-
-    # puts "#" * 90
-    # puts aes.update(Base64.strict_decode64(encrypted_body)) + aes.final
-    # puts "#" * 90
-
-
-    hmac = OpenSSL::HMAC.hexdigest(
-      "SHA256",
-      Digest::SHA256.hexdigest("password"),
-      encrypted_body
-    )
-
-    File.open("boop.md", "w") do |file|
-      file.puts <<~EOF
-        ---
-        #{front_matter}
-        encrypted: #{hmac}#{encrypted_body}
-        ---
-      EOF
+    File.open(target_fn(fn), "w") do |file|
+      file.puts fill_template(front_matter, encrypted)
     end
   end
 end
 
-# keysize: 8
-# ivsize: 4
-# salt: salt = WordArray.random(64/8);
+def parse_file(file)
+  _, front_matter, body = file.read.split("---", 3).map(&:strip)
+  html = Kramdown::Document.new(body.strip, input: "markdown").to_html
+  [front_matter, html]
+end
 
-# CryptoJS.lib.WordArray.random(64/8).toString();
-# "6491606eb574c6e2"
+def encrypt_body(html)
+  aes = OpenSSL::Cipher.new("AES-256-CBC")
+  aes.encrypt
+  salt = OpenSSL::Random.random_bytes(8)
+  aes.pkcs5_keyivgen("password", salt, 1)
+  binary = "Salted__#{salt}#{aes.update(html) + aes.final}"
+  encrypted_body = Base64.strict_encode64(binary)
 
+  hmac = OpenSSL::HMAC.hexdigest(
+    "SHA256",
+    Digest::SHA256.hexdigest("password"),
+    encrypted_body
+  )
+  hmac + encrypted_body
+end
 
-# var key = EvpKDF.create({ keySize: keySize + ivSize }).compute(password, salt);
+def target_fn(fn)
+  File.join("_posts", File.basename(fn))
+end
 
-    # cfg: Base.extend({
-    #         keySize: 128/32,
-    #         hasher: MD5,
-    #         iterations: 1
-    #     }),
+def fill_template(front_matter, encrypted)
+  <<~EOF
+    ---
+    #{front_matter}
+    encrypted: #{encrypted}
+    ---
+  EOF
+end
 
-
-
-
-# // Separate key and IV
-# var iv = WordArray.create(key.words.slice(keySize), ivSize * 4);
-# key.sigBytes = keySize * 4;
+main
