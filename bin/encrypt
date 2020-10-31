@@ -20,6 +20,13 @@ def encrypt_file(fn)
     front_matter, html = parse_file(file)
     encrypted = encrypt_body(html)
 
+    yaml = YAML.load_file(target_fn(fn))
+    body = decrypt_body(yaml["encrypted"])
+    if yaml.reject { |k,_| k == "encrypted" } == YAML.load(front_matter) && body == html
+      puts "skipping #{File.basename(fn)} - no change"
+      next
+    end
+
     File.open(target_fn(fn), "w") do |file|
       file.puts fill_template(front_matter, encrypted)
     end
@@ -30,6 +37,16 @@ def parse_file(file)
   _, front_matter, body = file.read.split("---", 3).map(&:strip)
   html = Kramdown::Document.new(body.strip, input: "markdown").to_html
   [front_matter, html]
+end
+
+def decrypt_body(encrypted)
+  data = Base64.strict_decode64(encrypted[64..-1])
+  salt = data[8..15]
+  data = data[16..-1]
+  aes = OpenSSL::Cipher.new("AES-256-CBC")
+  aes.decrypt
+  aes.pkcs5_keyivgen("password", salt, 1)
+  aes.update(data) + aes.final
 end
 
 def encrypt_body(html)
