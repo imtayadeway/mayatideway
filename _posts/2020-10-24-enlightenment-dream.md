@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: dreams
 title: enlightenment dream
 date: 2020-10-24 20:02:04 -0700
 categories: dreams

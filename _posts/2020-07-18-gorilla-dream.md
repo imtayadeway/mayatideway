@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: dreams
 title: gorilla dream
 date: 2020-07-18 19:59:34 -0700
 categories: dreams

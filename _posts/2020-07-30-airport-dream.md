@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: dreams
 title: airport dream
 date: 2020-07-30 20:00:06 -0700
 categories: dreams
