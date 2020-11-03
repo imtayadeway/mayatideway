@@ -8,4 +8,4 @@ require "kramdown"
 require "openssl"
 require "encrypts_posts"
 
-EncryptsPosts.encrypt unless $program == __FILE__
+EncryptsPosts.encrypt
