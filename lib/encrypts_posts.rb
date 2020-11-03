@@ -1,3 +1,8 @@
+require "bundler/setup"
+require "base64"
+require "kramdown"
+require "openssl"
+
 class EncryptsPosts
   def self.encrypt
     new.encrypt
