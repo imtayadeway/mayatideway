@@ -3,6 +3,32 @@ require "base64"
 require "kramdown"
 require "openssl"
 
+class Post
+  attr_reader :fn
+
+  def initialize(fn)
+    @fn = fn
+  end
+
+  %i[front_matter markdown html].each do |meth|
+    class_eval(<<~EOS)
+      def #{meth}
+        parse_file unless defined?(@#{meth})
+        @#{meth}
+      end
+    EOS
+  end
+
+  private
+
+  def parse_file
+    File.open(fn) do |file|
+      _, @front_matter, @markdown = file.read.split("---", 3).map(&:strip)
+      @html = Kramdown::Document.new(@markdown, input: "markdown").to_html
+    end
+  end
+end
+
 class EncryptsPosts
   PASSPHRASE = "password".freeze # LOL, pls change me
 
@@ -21,20 +47,18 @@ class EncryptsPosts
   end
 
   def encrypt_file(fn)
-    File.open(fn) do |file|
-      front_matter, html = parse_file(file)
-      encrypted = encrypt_body(html)
+    post = Post.new(fn)
+    encrypted = encrypt_body(post.html)
 
-      yaml = YAML.load_file(target_fn(fn))
-      body = decrypt_body(yaml["encrypted"])
-      if yaml.reject { |k,_| k == "encrypted" } == YAML.load(front_matter) && body == html
-        puts "skipping #{File.basename(fn)} - no change"
-        next
-      end
+    yaml = YAML.load_file(target_fn(fn))
+    body = decrypt_body(yaml["encrypted"])
+    if yaml.reject { |k,_| k == "encrypted" } == YAML.load(post.front_matter) && body == post.html
+      puts "skipping #{File.basename(fn)} - no change"
+      return
+    end
 
-      File.open(target_fn(fn), "w") do |file|
-        file.puts fill_template(front_matter, encrypted)
-      end
+    File.open(target_fn(fn), "w") do |file|
+      file.puts fill_template(front_matter, encrypted)
     end
   end
 
