@@ -5,12 +5,19 @@ require "openssl"
 
 class Post
   def self.protected
-    Dir.glob("_protected/*").map { |fn| new(fn) }
+    Dir.glob("_protected/*").map { |fn| load(fn) }
   end
 
-  attr_reader :fn
+  def self.load(fn)
+    File.open(fn) do |file|
+      new(file.read, fn)
+    end
+  end
 
-  def initialize(fn)
+  attr_reader :content, :fn
+
+  def initialize(content, fn = "")
+    @content = content
     @fn = fn
   end
 
@@ -23,14 +30,36 @@ class Post
     EOS
   end
 
+  def ==(other)
+    (decrypted || html) == (other.decrypted || other.html) &&
+      front_matter.reject { |k,_| k == "encrypted" } == other.front_matter.reject { |k,_| k == "encrypted" }
+  end
+
+  def decrypted
+    return unless front_matter["encrypted"]
+    data = Base64.strict_decode64(front_matter["encrypted"][64..-1])
+    salt = data[8..15]
+    data = data[16..-1]
+    aes = OpenSSL::Cipher.new("AES-256-CBC")
+    aes.decrypt
+    aes.pkcs5_keyivgen("password", salt, 1)
+    aes.update(data) + aes.final
+  end
+
   private
 
   def parse
-    File.open(fn) do |file|
-      _, yaml, @markdown = file.read.split("---", 3).map(&:strip)
-      @front_matter = YAML.load(yaml)
-      @html = Kramdown::Document.new(@markdown, input: "markdown").to_html
-    end
+    _, yaml, @markdown = content.split("---", 3).map(&:strip)
+    @front_matter = begin
+                      YAML.load(yaml)
+                    rescue
+                      {}
+                    end
+    @html = if @markdown
+              Kramdown::Document.new(@markdown, input: "markdown").to_html
+            else
+              decrypted
+            end
   end
 end
 
@@ -42,35 +71,24 @@ class EncryptsPosts
   end
 
   def encrypt
-    Post.protected.each do |fn|
-      encrypt_file(fn)
+    Post.protected.each do |file|
+      encrypt_file(file)
     end
   end
 
-  def encrypt_file(fn)
-    post = Post.new(fn)
+  def encrypt_file(post)
     encrypted = encrypt_body(post.html)
 
-    yaml = YAML.load_file(target_fn(fn))
-    body = decrypt_body(yaml["encrypted"])
-    if yaml.reject { |k,_| k == "encrypted" } == post.front_matter && body == post.html
-      puts "skipping #{File.basename(fn)} - no change"
-      return
+    if File.exist?(target_fn(post.fn))
+      if post == Post.load(target_fn(post.fn))
+        puts "skipping #{File.basename(post.fn)} - no change"
+        return
+      end
     end
 
-    File.open(target_fn(fn), "w") do |file|
-      file.puts fill_template(front_matter, encrypted)
+    File.open(target_fn(post.fn), "w") do |file|
+      file.puts fill_template(post.front_matter, encrypted)
     end
-  end
-
-  def decrypt_body(encrypted)
-    data = Base64.strict_decode64(encrypted[64..-1])
-    salt = data[8..15]
-    data = data[16..-1]
-    aes = OpenSSL::Cipher.new("AES-256-CBC")
-    aes.decrypt
-    aes.pkcs5_keyivgen(PASSPHRASE, salt, 1)
-    aes.update(data) + aes.final
   end
 
   def encrypt_body(html)
