@@ -4,6 +4,8 @@ require "kramdown"
 require "openssl"
 
 class EncryptsPosts
+  PASSPHRASE = "password".freeze # LOL, pls change me
+
   def self.encrypt
     new.encrypt
   end
@@ -48,7 +50,7 @@ class EncryptsPosts
     data = data[16..-1]
     aes = OpenSSL::Cipher.new("AES-256-CBC")
     aes.decrypt
-    aes.pkcs5_keyivgen("password", salt, 1)
+    aes.pkcs5_keyivgen(PASSPHRASE, salt, 1)
     aes.update(data) + aes.final
   end
 
@@ -56,13 +58,13 @@ class EncryptsPosts
     aes = OpenSSL::Cipher.new("AES-256-CBC")
     aes.encrypt
     salt = OpenSSL::Random.random_bytes(8)
-    aes.pkcs5_keyivgen("password", salt, 1)
+    aes.pkcs5_keyivgen(PASSPHRASE, salt, 1)
     binary = "Salted__#{salt}#{aes.update(html) + aes.final}"
     encrypted_body = Base64.strict_encode64(binary)
 
     hmac = OpenSSL::HMAC.hexdigest(
       "SHA256",
-      Digest::SHA256.hexdigest("password"),
+      Digest::SHA256.hexdigest(PASSPHRASE),
       encrypted_body
     )
     hmac + encrypted_body
