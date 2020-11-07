@@ -63,12 +63,6 @@ class EncryptsPosts
     end
   end
 
-  def parse_file(file)
-    _, front_matter, body = file.read.split("---", 3).map(&:strip)
-    html = Kramdown::Document.new(body.strip, input: "markdown").to_html
-    [front_matter, html]
-  end
-
   def decrypt_body(encrypted)
     data = Base64.strict_decode64(encrypted[64..-1])
     salt = data[8..15]
