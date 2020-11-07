@@ -4,6 +4,10 @@ require "kramdown"
 require "openssl"
 
 class Post
+  def self.protected
+    Dir.glob("_protected/*").map { |fn| new(fn) }
+  end
+
   attr_reader :fn
 
   def initialize(fn)
@@ -38,13 +42,9 @@ class EncryptsPosts
   end
 
   def encrypt
-    protected_files.each do |fn|
+    Post.protected.each do |fn|
       encrypt_file(fn)
     end
-  end
-
-  def protected_files
-    Dir.glob("_protected/*")
   end
 
   def encrypt_file(fn)
