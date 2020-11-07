@@ -13,7 +13,7 @@ class Post
   %i[front_matter markdown html].each do |meth|
     class_eval(<<~EOS)
       def #{meth}
-        parse_file unless defined?(@#{meth})
+        parse unless defined?(@#{meth})
         @#{meth}
       end
     EOS
@@ -21,7 +21,7 @@ class Post
 
   private
 
-  def parse_file
+  def parse
     File.open(fn) do |file|
       _, yaml, @markdown = file.read.split("---", 3).map(&:strip)
       @front_matter = YAML.load(yaml)
