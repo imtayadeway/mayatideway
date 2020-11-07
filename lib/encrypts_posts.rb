@@ -23,7 +23,8 @@ class Post
 
   def parse_file
     File.open(fn) do |file|
-      _, @front_matter, @markdown = file.read.split("---", 3).map(&:strip)
+      _, yaml, @markdown = file.read.split("---", 3).map(&:strip)
+      @front_matter = YAML.load(yaml)
       @html = Kramdown::Document.new(@markdown, input: "markdown").to_html
     end
   end
@@ -52,7 +53,7 @@ class EncryptsPosts
 
     yaml = YAML.load_file(target_fn(fn))
     body = decrypt_body(yaml["encrypted"])
-    if yaml.reject { |k,_| k == "encrypted" } == YAML.load(post.front_matter) && body == post.html
+    if yaml.reject { |k,_| k == "encrypted" } == post.front_matter && body == post.html
       puts "skipping #{File.basename(fn)} - no change"
       return
     end
@@ -100,8 +101,7 @@ class EncryptsPosts
 
   def fill_template(front_matter, encrypted)
     <<~EOF
-    ---
-    #{front_matter}
+    #{front_matter.to_yaml}
     encrypted: #{encrypted}
     ---
   EOF
