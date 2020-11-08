@@ -11,13 +11,9 @@ module Mayatideway
     end
 
     def encrypt
-      if File.exist?(target_fn(post.fn))
-        encrypted_post = EncryptedPost.load(target_fn(post.fn))
-
-        if post.html == encrypted_post.html && post.front_matter == encrypted_post.front_matter.reject { |k,_| k == "encrypted" }
-          puts "skipping #{File.basename(post.fn)} - no change"
-          return
-        end
+      if done?
+        puts "skipping #{File.basename(post.fn)} - no change"
+        return
       end
 
       File.open(target_fn(post.fn), "w") do |file|
@@ -42,6 +38,13 @@ module Mayatideway
           )
           hmac + encrypted_body
         end
+    end
+
+    def done?
+      return false unless File.exist?(target_fn(post.fn))
+      encrypted_post = EncryptedPost.load(target_fn(post.fn))
+      post.html == encrypted_post.html &&
+        post.front_matter == encrypted_post.front_matter.reject { |k,_| k == "encrypted" }
     end
 
     def target_fn(fn)
