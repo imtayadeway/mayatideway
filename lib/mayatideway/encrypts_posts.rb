@@ -24,11 +24,9 @@ module Mayatideway
     def encrypted
       @encrypted ||=
         begin
-          aes = OpenSSL::Cipher.new("AES-256-CBC")
-          aes.encrypt
           salt = OpenSSL::Random.random_bytes(8)
-          aes.pkcs5_keyivgen(PASSPHRASE, salt, 1)
-          binary = "Salted__#{salt}#{aes.update(post.html) + aes.final}"
+          cipher.pkcs5_keyivgen(PASSPHRASE, salt, 1)
+          binary = "Salted__#{salt}#{cipher.update(post.html) + cipher.final}"
           encrypted_body = Base64.strict_encode64(binary)
 
           hmac = OpenSSL::HMAC.hexdigest(
@@ -38,6 +36,10 @@ module Mayatideway
           )
           hmac + encrypted_body
         end
+    end
+
+    def cipher
+      @cipher ||= OpenSSL::Cipher.new("AES-256-CBC").tap { |c| c.encrypt }
     end
 
     def done?
