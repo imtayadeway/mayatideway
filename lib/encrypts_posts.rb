@@ -1,24 +1,18 @@
-require "bundler/setup"
-require "base64"
-require "kramdown"
-require "openssl"
-require "post"
-require "encrypted_post"
 
 class EncryptsPosts
   PASSPHRASE = "password".freeze # LOL, pls change me
 
-  def self.encrypt
-    new.encrypt
+  attr_reader :post
+
+  def self.encrypt(post)
+    new(post).encrypt
+  end
+
+  def initialize(post)
+    @post = post
   end
 
   def encrypt
-    Post.protected.each do |file|
-      encrypt_file(file)
-    end
-  end
-
-  def encrypt_file(post)
     encrypted = encrypt_body(post.html)
 
     if File.exist?(target_fn(post.fn))

@@ -2,6 +2,6 @@
 
 $LOAD_PATH.unshift(File.expand_path(File.join(__dir__, "..", "lib")))
 
-require "encrypts_posts"
+require "mayatideway"
 
-EncryptsPosts.encrypt
+Mayatideway.encrypt
