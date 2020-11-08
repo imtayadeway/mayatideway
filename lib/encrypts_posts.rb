@@ -56,10 +56,6 @@ class EncryptsPosts
   end
 
   def fill_template(front_matter, encrypted)
-    <<~EOF
-    #{front_matter.to_yaml}
-    encrypted: #{encrypted}
-    ---
-  EOF
+    front_matter.merge(encrypted: encrypted).to_yaml + "\n---"
   end
 end
