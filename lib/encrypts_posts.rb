@@ -30,13 +30,40 @@ class Post
     EOS
   end
 
-  def ==(other)
-    (decrypted || html) == (other.decrypted || other.html) &&
-      front_matter.reject { |k,_| k == "encrypted" } == other.front_matter.reject { |k,_| k == "encrypted" }
+  private
+
+  def parse
+    _, yaml, @markdown = content.split("---", 3).map(&:strip)
+    @front_matter = YAML.load(yaml)
+    @html = Kramdown::Document.new(@markdown, input: "markdown").to_html
+  end
+end
+
+class EncryptedPost
+  def self.load(fn)
+    File.open(fn) do |file|
+      new(file.read, fn)
+    end
   end
 
-  def decrypted
-    return unless front_matter["encrypted"]
+  attr_reader :content, :fn
+
+  def initialize(content, fn = "")
+    @content = content
+    @fn = fn
+  end
+
+  def front_matter
+    @front_matter ||= YAML.load(content.split("---", 3).map(&:strip)[1])
+  end
+
+  def html
+    @html ||= decrypt
+  end
+
+  private
+
+  def decrypt
     data = Base64.strict_decode64(front_matter["encrypted"][64..-1])
     salt = data[8..15]
     data = data[16..-1]
@@ -44,22 +71,6 @@ class Post
     aes.decrypt
     aes.pkcs5_keyivgen("password", salt, 1)
     aes.update(data) + aes.final
-  end
-
-  private
-
-  def parse
-    _, yaml, @markdown = content.split("---", 3).map(&:strip)
-    @front_matter = begin
-                      YAML.load(yaml)
-                    rescue
-                      {}
-                    end
-    @html = if @markdown
-              Kramdown::Document.new(@markdown, input: "markdown").to_html
-            else
-              decrypted
-            end
   end
 end
 
@@ -80,7 +91,9 @@ class EncryptsPosts
     encrypted = encrypt_body(post.html)
 
     if File.exist?(target_fn(post.fn))
-      if post == Post.load(target_fn(post.fn))
+      encrypted_post = EncryptedPost.load(target_fn(post.fn))
+
+      if post.html == encrypted_post.html && post.front_matter == encrypted_post.front_matter.reject { |k,_| k == "encrypted" }
         puts "skipping #{File.basename(post.fn)} - no change"
         return
       end

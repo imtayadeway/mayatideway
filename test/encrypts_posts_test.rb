@@ -28,7 +28,7 @@ class EncryptsPostsTest < Minitest::Test
 
   def test_symmetry
     encrypted = EncryptsPosts.new.encrypt_body("<p>boop</p>")
-    decrypted = Post.new({"encrypted" => encrypted}.to_yaml).html
+    decrypted = EncryptedPost.new({"encrypted" => encrypted}.to_yaml).html
     assert_equal("<p>boop</p>", decrypted)
   end
 end
