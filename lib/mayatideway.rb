@@ -7,6 +7,8 @@ require "post"
 require "encrypted_post"
 
 module Mayatideway
+  PASSPHRASE = "password".freeze # LOL, pls change me
+
   def self.encrypt
     Post.protected.each do |post|
       EncryptsPosts.encrypt(post)

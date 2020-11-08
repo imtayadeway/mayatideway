@@ -1,7 +1,4 @@
-
 class EncryptsPosts
-  PASSPHRASE = "password".freeze # LOL, pls change me
-
   attr_reader :post
 
   def self.encrypt(post)
@@ -33,13 +30,13 @@ class EncryptsPosts
     aes = OpenSSL::Cipher.new("AES-256-CBC")
     aes.encrypt
     salt = OpenSSL::Random.random_bytes(8)
-    aes.pkcs5_keyivgen(PASSPHRASE, salt, 1)
+    aes.pkcs5_keyivgen(Mayatideway::PASSPHRASE, salt, 1)
     binary = "Salted__#{salt}#{aes.update(html) + aes.final}"
     encrypted_body = Base64.strict_encode64(binary)
 
     hmac = OpenSSL::HMAC.hexdigest(
       "SHA256",
-      Digest::SHA256.hexdigest(PASSPHRASE),
+      Digest::SHA256.hexdigest(Mayatideway::PASSPHRASE),
       encrypted_body
     )
     hmac + encrypted_body
