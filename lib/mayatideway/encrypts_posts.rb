@@ -11,8 +11,6 @@ module Mayatideway
     end
 
     def encrypt
-      encrypted = encrypt_body(post.html)
-
       if File.exist?(target_fn(post.fn))
         encrypted_post = EncryptedPost.load(target_fn(post.fn))
 
@@ -27,20 +25,23 @@ module Mayatideway
       end
     end
 
-    def encrypt_body(html)
-      aes = OpenSSL::Cipher.new("AES-256-CBC")
-      aes.encrypt
-      salt = OpenSSL::Random.random_bytes(8)
-      aes.pkcs5_keyivgen(PASSPHRASE, salt, 1)
-      binary = "Salted__#{salt}#{aes.update(html) + aes.final}"
-      encrypted_body = Base64.strict_encode64(binary)
+    def encrypted
+      @encrypted ||=
+        begin
+          aes = OpenSSL::Cipher.new("AES-256-CBC")
+          aes.encrypt
+          salt = OpenSSL::Random.random_bytes(8)
+          aes.pkcs5_keyivgen(PASSPHRASE, salt, 1)
+          binary = "Salted__#{salt}#{aes.update(post.html) + aes.final}"
+          encrypted_body = Base64.strict_encode64(binary)
 
-      hmac = OpenSSL::HMAC.hexdigest(
-        "SHA256",
-        Digest::SHA256.hexdigest(PASSPHRASE),
-        encrypted_body
-      )
-      hmac + encrypted_body
+          hmac = OpenSSL::HMAC.hexdigest(
+            "SHA256",
+            Digest::SHA256.hexdigest(PASSPHRASE),
+            encrypted_body
+          )
+          hmac + encrypted_body
+        end
     end
 
     def target_fn(fn)
