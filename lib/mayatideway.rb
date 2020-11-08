@@ -7,11 +7,15 @@ require "mayatideway/post"
 require "mayatideway/encrypted_post"
 
 module Mayatideway
-  PASSPHRASE = "password".freeze # LOL, pls change me
+  PASSPHRASE_NAME = "MDRPASSPHRASE".freeze
 
   def self.encrypt
     Post.protected.each do |post|
       EncryptsPosts.encrypt(post)
     end
+  end
+
+  def self.fetch_passphrase
+    ENV.fetch(PASSPHRASE_NAME)
   end
 end

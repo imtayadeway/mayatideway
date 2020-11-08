@@ -1,7 +1,13 @@
 #!/usr/bin/env ruby
 
 $LOAD_PATH.unshift(File.expand_path(File.join(__dir__, "..", "lib")))
-
 require "mayatideway"
+
+begin
+  Mayatideway.fetch_passphrase
+rescue KeyError
+  STDERR.puts "error: passphrase needed. set via MDRPASSPHRASE=<...>"
+  exit(1)
+end
 
 Mayatideway.encrypt

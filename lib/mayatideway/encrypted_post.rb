@@ -29,7 +29,7 @@ module Mayatideway
       data = data[16..-1]
       aes = OpenSSL::Cipher.new("AES-256-CBC")
       aes.decrypt
-      aes.pkcs5_keyivgen(PASSPHRASE, salt, 1)
+      aes.pkcs5_keyivgen(Mayatideway.fetch_passphrase, salt, 1)
       aes.update(data) + aes.final
     end
   end

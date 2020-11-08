@@ -28,7 +28,7 @@ module Mayatideway
     def hmac
       @hmac ||= OpenSSL::HMAC.hexdigest(
         "SHA256",
-        Digest::SHA256.hexdigest(PASSPHRASE),
+        Digest::SHA256.hexdigest(Mayatideway.fetch_passphrase),
         encoded
       )
     end
@@ -41,7 +41,7 @@ module Mayatideway
       @salted ||=
         begin
           cipher = OpenSSL::Cipher.new("AES-256-CBC").tap { |c| c.encrypt }
-          cipher.pkcs5_keyivgen(PASSPHRASE, salt, 1)
+          cipher.pkcs5_keyivgen(Mayatideway.fetch_passphrase, salt, 1)
           "Salted__#{salt}#{cipher.update(post.html) + cipher.final}"
         end
     end
