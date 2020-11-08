@@ -3,9 +3,7 @@ author:
   name: maya tideway
   email: hello@mayatideway.com
 description: >-
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  writings and musings about the inner life of an introvert
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://mayatideway.com" # the base hostname & protocol for your site, e.g. http://example.com
 paginate: 5
