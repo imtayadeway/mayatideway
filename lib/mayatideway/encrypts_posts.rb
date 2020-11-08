@@ -24,7 +24,6 @@ module Mayatideway
     def encrypted
       @encrypted ||=
         begin
-          salt = OpenSSL::Random.random_bytes(8)
           cipher.pkcs5_keyivgen(PASSPHRASE, salt, 1)
           binary = "Salted__#{salt}#{cipher.update(post.html) + cipher.final}"
           encrypted_body = Base64.strict_encode64(binary)
@@ -40,6 +39,10 @@ module Mayatideway
 
     def cipher
       @cipher ||= OpenSSL::Cipher.new("AES-256-CBC").tap { |c| c.encrypt }
+    end
+
+    def salt
+      @salt ||= OpenSSL::Random.random_bytes(8)
     end
 
     def done?
