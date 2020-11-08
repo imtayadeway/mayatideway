@@ -24,14 +24,17 @@ module Mayatideway
     def encrypted
       @encrypted ||=
         begin
-          encrypted_body = Base64.strict_encode64(salted)
           hmac = OpenSSL::HMAC.hexdigest(
             "SHA256",
             Digest::SHA256.hexdigest(PASSPHRASE),
-            encrypted_body
+            encoded
           )
-          hmac + encrypted_body
+          hmac + encoded
         end
+    end
+
+    def encoded
+      @encoded = Base64.strict_encode64(salted)
     end
 
     def salted
