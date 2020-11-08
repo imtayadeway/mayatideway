@@ -51,14 +51,14 @@ module Mayatideway
     end
 
     def done?
-      return false unless File.exist?(target_fn(post.fn))
-      encrypted_post = EncryptedPost.load(target_fn(post.fn))
+      return false unless File.exist?(target_fn)
+      encrypted_post = EncryptedPost.load(target_fn)
       post.html == encrypted_post.html &&
         post.front_matter == encrypted_post.front_matter.reject { |k,_| k == "encrypted" }
     end
 
-    def target_fn(fn)
-      File.join("_posts", File.basename(fn))
+    def target_fn
+      File.join("_posts", File.basename(post.fn))
     end
 
     def fill_template(front_matter, encrypted)
