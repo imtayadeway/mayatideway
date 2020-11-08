@@ -24,10 +24,7 @@ module Mayatideway
     def encrypted
       @encrypted ||=
         begin
-          cipher.pkcs5_keyivgen(PASSPHRASE, salt, 1)
-          binary = "Salted__#{salt}#{cipher.update(post.html) + cipher.final}"
-          encrypted_body = Base64.strict_encode64(binary)
-
+          encrypted_body = Base64.strict_encode64(salted)
           hmac = OpenSSL::HMAC.hexdigest(
             "SHA256",
             Digest::SHA256.hexdigest(PASSPHRASE),
@@ -37,8 +34,13 @@ module Mayatideway
         end
     end
 
-    def cipher
-      @cipher ||= OpenSSL::Cipher.new("AES-256-CBC").tap { |c| c.encrypt }
+    def salted
+      @salted ||=
+        begin
+          cipher = OpenSSL::Cipher.new("AES-256-CBC").tap { |c| c.encrypt }
+          cipher.pkcs5_keyivgen(PASSPHRASE, salt, 1)
+          "Salted__#{salt}#{cipher.update(post.html) + cipher.final}"
+        end
     end
 
     def salt
