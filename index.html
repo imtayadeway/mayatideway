@@ -10,8 +10,9 @@ layout: default
     {% if post.encrypted %}
       <small class="text-muted">(protected)</small>
     {% endif %}
+    <small class="text-muted">{{ post.date | date: "%b %-d, %Y" }}</small>
   </h1>
-  <p class="text-muted">{{ post.date | date: "%b %-d, %Y" }}</p>
+  <small class="text-muted"><em>{{ post.categories }}</em></small>
   <div>
     {{ post.content }}
   </div>
