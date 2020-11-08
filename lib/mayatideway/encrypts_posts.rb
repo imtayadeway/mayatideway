@@ -17,7 +17,7 @@ module Mayatideway
       end
 
       File.open(target_fn(post.fn), "w") do |file|
-        file.puts fill_template(post.front_matter, encrypted)
+        file.puts post.front_matter.merge(encrypted: encrypted).to_yaml + "\n---"
       end
     end
 
@@ -59,10 +59,6 @@ module Mayatideway
 
     def target_fn
       File.join("_posts", File.basename(post.fn))
-    end
-
-    def fill_template(front_matter, encrypted)
-      front_matter.merge(encrypted: encrypted).to_yaml + "\n---"
     end
   end
 end
