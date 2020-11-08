@@ -22,15 +22,15 @@ module Mayatideway
     end
 
     def encrypted
-      @encrypted ||=
-        begin
-          hmac = OpenSSL::HMAC.hexdigest(
-            "SHA256",
-            Digest::SHA256.hexdigest(PASSPHRASE),
-            encoded
-          )
-          hmac + encoded
-        end
+      @encrypted ||= hmac + encoded
+    end
+
+    def hmac
+      @hmac ||= OpenSSL::HMAC.hexdigest(
+        "SHA256",
+        Digest::SHA256.hexdigest(PASSPHRASE),
+        encoded
+      )
     end
 
     def encoded
