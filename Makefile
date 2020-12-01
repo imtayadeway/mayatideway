@@ -3,7 +3,7 @@
 encrypt:
 	bin/encrypt
 
-build: encrypt
+build:
 	bundle exec jekyll build
 
 deploy: build
