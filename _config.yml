@@ -2,8 +2,7 @@ title: memories, dreams, reflections
 author:
   name: maya tideway
   email: hello@mayatideway.com
-description: >-
-  writings and musings about the inner life of an introvert
+description: ""
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://mayatideway.com" # the base hostname & protocol for your site, e.g. http://example.com
 paginate: 5
