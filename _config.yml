@@ -11,6 +11,7 @@ plugins:
   - jekyll-feed
   - jekyll-paginate
   - jekyll-seo-tag
+  - jekyll-sitemap
 
 exclude:
   - .sass-cache/
