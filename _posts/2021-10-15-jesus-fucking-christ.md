@@ -45,6 +45,6 @@ the black mass,
 nor the white mass,
 summon devils or the holy ghost,
 or shoo them both away.
-why then do you play me <i>pianissimo<i>
-when i am clearly marked, <i>con furia<i>, <i>ecstatico<i>, <i>impetuoso<i>?
+why then do you play me <i>pianissimo</i>
+when i am clearly marked, <i>con furia</i>, <i>ecstatico</i>, <i>impetuoso</i>?
 </pre>
