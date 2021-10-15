@@ -1,0 +1,50 @@
+---
+layout: post
+title: jesus fucking christ
+date: 2021-10-15 16:04:18 -0700
+categories: pomes
+---
+
+<pre>
+said the senior alter boy to me,
+  you are timothy, fearer of god
+and as i stand there in the sacristy,
+steeped in frankincense,
+blushing in my crimson cassock,
+all the while concealing something sinister under my tongue,
+i smile and nod yes i am.
+
+but it is not always an act of timidity to keep your mouth shut.
+like the time we stayed up all night,
+peeled a lemon like an orange,
+ate each segment one by one
+<!--- the start of something new? a sacrament --->
+and did not complain
+
+or the time we ate a spoonful of cinnamon
+and i watched you snort its fiery bark through your nose,
+eyes streaming,
+while i sat there, steadfast and stony-faced,
+<!--- the last rites? --->
+and we both knew it was all over
+
+jesus fucking christ
+
+<!--- delete this? --->
+i am listening now to the recording of that talk,
+the one where i asked tony conrad a question,
+so terribly afraid and ashamed of my own voice,
+wait for it,
+and then i hear something more damning than i could possibly imagine -
+the sound of nothing
+i am cursed, my mouth sealed,
+my voice cannot be picked up by microphones.
+
+but these hands are not afraid to play
+the black mass,
+nor the white mass,
+summon devils or the holy ghost,
+or shoo them both away.
+why then do you play me _pianissimo_
+when i am clearly marked, _con furia_, _ecstatico_, _impetuoso_?
+</pre>
