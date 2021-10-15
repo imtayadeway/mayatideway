@@ -28,7 +28,6 @@ and we both knew it was all over<!--- the last rites? --->
 
 jesus fucking christ
 
-
 <!--- delete this? --->i am listening now to the recording of that talk,
 the one where i asked tony conrad a question,
 so terribly afraid and ashamed of my own voice,
