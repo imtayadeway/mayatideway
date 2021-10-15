@@ -17,21 +17,19 @@ i smile and nod yes i am.
 but it is not always an act of timidity to keep your mouth shut.
 like the time we stayed up all night,
 peeled a lemon like an orange,
-ate each segment one by one
-<!--- the start of something new? a sacrament --->
+ate each segment one by one<!--- the start of something new? a sacrament --->
 and did not complain
 
 or the time we ate a spoonful of cinnamon
 and i watched you snort its fiery bark through your nose,
 eyes streaming,
 while i sat there, steadfast and stony-faced,
-<!--- the last rites? --->
-and we both knew it was all over
+and we both knew it was all over<!--- the last rites? --->
 
 jesus fucking christ
 
-<!--- delete this? --->
-i am listening now to the recording of that talk,
+
+<!--- delete this? --->i am listening now to the recording of that talk,
 the one where i asked tony conrad a question,
 so terribly afraid and ashamed of my own voice,
 wait for it,
