@@ -8,7 +8,7 @@ layout: default
       {{ post.title | escape }}
     </a>
     {% if post.encrypted %}
-      <small class="text-muted">(protected)</small>
+      <small class="text-muted"> 🔒</small>
     {% endif %}
     <small class="text-muted">{{ post.date | date: "%b %-d, %Y" }}</small>
   </h1>
