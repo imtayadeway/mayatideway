@@ -44,22 +44,22 @@ Melly and he approached him meekly and George Melly was a complete
 cunt to him and I was embarrassed and I was never sure if he was too
 or if he hadn't noticed that George Melly was being a cunt to him, the
 way he would scratch his five o'clock shadow with his thumbnail and it
-would make a noise, the way I loved that noise, the way he was not too
-bad, the way he was every day, in every way, getting better and
-better, the way how if he was feeling better tomorrow he would get out
-in the garden or do some work on the bike or work on the train set,
-the way I think he still thinks that if he's feeling better tomorrow
-he'll get out in the garden, the way he knew where every single
-fucking thing in the house was, every screw or cable or piece of rope
-or catalogue, the way he loved the Blue Moons but was more ambivalent
-about the Icebergs and how that David Austin was a load of bloody
-crap, the way he tried to order the roses behind Sue's back on his
-deathbed, don't tell your mother, the way he tried to get Lucy in on
-it because she was sneaky and could keep a secret, the way Sue would
-give him hell over the least thing but somehow it was worth risking
-everything for the roses, the way I offered him some Beethoven and he
-said ooh yeah I'd love a bacon sandwich, the way you hadn't had a
-bacon sandwich until you had one from that place off London Bridge,
+would make a noise, the way I loved that noise, triffick, the way he
+was not too bad, the way he was every day, in every way, getting
+better and better, the way how if he was feeling better tomorrow he
+would get out in the garden or do some work on the bike or work on the
+train set, the way I think he still thinks that if he's feeling better
+tomorrow he'll get out in the garden, the way he knew where every
+single fucking thing in the house was, every screw or cable or piece
+of rope or catalogue, the way he loved the Blue Moons but was more
+ambivalent about the Icebergs and how that David Austin was a load of
+bloody crap, the way he tried to order the roses behind Sue's back on
+his deathbed, don't tell your mother, the way he tried to get Lucy in
+on it because she was sneaky and could keep a secret, the way Sue
+would give him hell over the least thing but somehow it was worth
+risking everything for the roses, the way I offered him some Beethoven
+and he said ooh yeah I'd love a bacon sandwich, the way you hadn't had
+a bacon sandwich until you had one from that place off London Bridge,
 the way he was right about that, you hadn't, the way I only really
 felt myself sometimes when I talked to him, the way I only used my
 real voice which is a South London voice I suppose when I talked to
