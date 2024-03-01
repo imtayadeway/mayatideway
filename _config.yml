@@ -5,7 +5,7 @@ author:
 description: ""
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://mayatideway.com" # the base hostname & protocol for your site, e.g. http://example.com
-paginate: 5
+paginate: 8
 
 plugins:
   - jekyll-feed
