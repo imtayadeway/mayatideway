@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+
+# require "file"
+require "time"
+
+def main
+  category = ARGV.shift
+  body = case category
+         when "pome"
+           "<pre></pre>"
+         when "dream"
+           "*. . . . . . . .*"
+         when "memory", "reflection"
+           ""
+         else
+           puts help
+           exit 1
+         end
+
+  path = if encrypt?
+           File.expand_path("../_protected/#{filename}", __dir__)
+         else
+           File.expand_path("../_posts/#{filename}.md", __dir__)
+         end
+
+  File.open(path, "w") do |file|
+    file.puts front_matter(category)
+    file.puts
+    file.puts body
+  end
+end
+
+def front_matter(category)
+  <<~EOS
+    ---
+    layout: #{layout}
+    title: #{title}
+    date: #{Time.now.strftime("%Y-%m-%d %H:%M:%S %z")}
+    categories: #{category}
+    ---
+  EOS
+end
+
+def layout
+  if encrypt?
+    "encrypted"
+  else
+    "post"
+  end
+end
+
+def filename
+  "#{Time.now.strftime("%Y-%m-%d")}-#{title}.md"
+end
+
+def title
+  ARGV.detect { |a| a.start_with?("--title=", "-t ") }.delete_prefix("--title=").delete_prefix("-t ")
+rescue
+  puts help
+  exit 1
+end
+
+def encrypt?
+  (ARGV & %w(--encrypt -e)).any?
+end
+
+def help
+  <<~EOH
+  Usage: bin/generate <memory|dream|reflection|pome> --title=<title> --encrypt
+  EOH
+end
+
+main
