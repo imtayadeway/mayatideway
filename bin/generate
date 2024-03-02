@@ -9,7 +9,7 @@ def main
          when "pome"
            "<pre></pre>"
          when "dream"
-           "*. . . . . . . .*"
+           "*. . . . in which . . . .*"
          when "memory", "reflection"
            ""
          else
