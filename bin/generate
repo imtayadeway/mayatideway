@@ -20,7 +20,7 @@ def main
   path = if encrypt?
            File.expand_path("../_protected/#{filename}", __dir__)
          else
-           File.expand_path("../_posts/#{filename}.md", __dir__)
+           File.expand_path("../_posts/#{filename}", __dir__)
          end
 
   File.open(path, "w") do |file|
